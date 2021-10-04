@@ -1,0 +1,124 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Configuration;
+using System.IO;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Xml.Serialization;
+
+namespace Emgu_Test
+{
+	///<summary>
+	// Processing Settings class
+	///</summary>
+	///
+	[DefaultPropertyAttribute("VideoSettings")]
+	[Serializable]
+	[XmlRoot("VideoSettings")]
+	public class VideoSettings
+	{
+
+		private string _fileName;
+
+		private int _min_blob_size = 200;
+		private int _max_blob_size = 200;
+		private int _grey_threshold = 100;
+		private int _blur_size = 0;
+		private int _erode_size = 0;
+		private int _dilate_size = 0;
+
+		[CategoryAttribute("File Settings"), DescriptionAttribute("File Path of Video")]
+		public string FileName
+		{
+			get
+			{
+				return _fileName;
+			}
+			set
+			{
+				_fileName = value;
+			}
+		}
+
+		[CategoryAttribute("Video Settings"), DescriptionAttribute("Minimum Blob Size")]
+		public int MinBlobSize
+		{
+			get
+			{
+				return _min_blob_size;
+			}
+			set
+			{
+				_min_blob_size = value;
+			}
+		}
+
+		[ CategoryAttribute("Video Settings"), DescriptionAttribute("Maximum Blob Size")]
+		public int MaxBlobSize
+		{
+			get
+			{
+				return _max_blob_size;
+			}
+			set
+			{
+				_max_blob_size = value;
+			}
+		}
+
+
+		[ CategoryAttribute("Video Settings"), DescriptionAttribute("Grey Value Threshold")]
+		public int GreyThreshold
+		{
+			get
+			{
+				return _grey_threshold;
+			}
+			set
+			{
+				_grey_threshold = value;
+			}
+		}
+
+		[CategoryAttribute("Video Settings"), DescriptionAttribute("Blob Erode Size")]
+		public int ErodeSize
+		{
+			get
+			{
+				return _erode_size;
+			}
+			set
+			{
+				_erode_size = value;
+			}
+		}
+
+		[CategoryAttribute("Video Settings"), DescriptionAttribute("Blob Dilate Size")]
+		public int DilateSize
+		{
+			get
+			{
+				return _dilate_size;
+			}
+			set
+			{
+				_dilate_size = value;
+			}
+		}
+
+		[CategoryAttribute("Video Settings"), DescriptionAttribute("Blur Size")]
+		public int BlurSize
+		{
+			get
+			{
+				return _blur_size;
+			}
+			set
+			{
+				_blur_size = value;
+			}
+		}
+	}
+}
