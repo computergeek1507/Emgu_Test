@@ -47,6 +47,7 @@ namespace Emgu_Test
 			_totalFrames = _videoCapture.Get(Emgu.CV.CvEnum.CapProp.FrameCount);
 
 			OnFrameCountSent(_totalFrames);
+			OnMessageSent("Video Loaded: " + _settings.FileName);
 		}
 
         public void ProcessSingleFrame(int frameIndex)

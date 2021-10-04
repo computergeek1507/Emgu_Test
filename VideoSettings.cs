@@ -23,11 +23,11 @@ namespace Emgu_Test
 		private string _fileName;
 
 		private int _min_blob_size = 200;
-		private int _max_blob_size = 200;
+		private int _max_blob_size = 2000;
 		private int _grey_threshold = 100;
-		private int _blur_size = 0;
-		private int _erode_size = 0;
-		private int _dilate_size = 0;
+		private int _blur_size = 5;
+		private int _erode_size = 5;
+		private int _dilate_size = 5;
 
 		[CategoryAttribute("File Settings"), DescriptionAttribute("File Path of Video")]
 		public string FileName
