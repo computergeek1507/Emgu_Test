@@ -79,6 +79,8 @@ namespace Emgu_Test
 
 		public void ProcessVideo()
         {
+			_currentFrameNo = 0;
+			_videoCapture.Set(Emgu.CV.CvEnum.CapProp.PosFrames, _currentFrameNo);
 			while (_currentFrameNo < _totalFrames)
 			{
 				var frame = _videoCapture.QueryFrame();
