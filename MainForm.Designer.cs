@@ -189,7 +189,6 @@ namespace Emgu_Test
         private System.Windows.Forms.ToolStripMenuItem exitToolStripMenuItem;
         private System.Windows.Forms.OpenFileDialog openFileDialog1;
         private System.Windows.Forms.PictureBox videoPictureBox;
-        private System.Windows.Forms.PictureBox pictureBox2;
 		private System.Windows.Forms.ListBox logListBox;
 		private System.Windows.Forms.Button processVideoButton;
 		private System.Windows.Forms.PropertyGrid videoPropertyGrid;

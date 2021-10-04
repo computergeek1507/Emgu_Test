@@ -12,13 +12,17 @@ using System.Threading.Tasks;
 
 namespace Emgu_Test
 {
-
+	public class FrameEventArgs : EventArgs
+	{
+		public double FrameCount { get; set; }
+		public double CurrentFrame { get; set; }
+	}
 	public class VideoProcessing
 	{
+		public delegate void FrameEventHandler(object sender, FrameEventArgs e);
+		public FrameEventHandler CurrentFrame;
 		public event EventHandler<Bitmap> ImageSent;
 		public event EventHandler<string> MessageSent;
-        public event EventHandler<double> FrameCount;
-		public event EventHandler<double> CurrentFrame;
 
 		VideoSettings _settings;
         VideoCapture _videoCapture;
@@ -34,9 +38,16 @@ namespace Emgu_Test
 
         void OnImageSent(Bitmap e) => ImageSent.Invoke(this, e);
 
-        void OnFrameCountSent(double e) => FrameCount.Invoke(this, e);
+		void OnCurrentFrameSent(FrameEventArgs e) => CurrentFrame.Invoke(this, e);
 
-		void OnCurrentFrameSent(double e) => CurrentFrame.Invoke(this, e);
+		public void SendFrameValue( double frame, double total)
+		{
+			OnCurrentFrameSent(new FrameEventArgs
+			{
+				CurrentFrame = frame,
+				FrameCount = total
+			});
+		}
 
 		public void LoadVideo(VideoSettings settings)
         {
@@ -46,7 +57,7 @@ namespace Emgu_Test
 			_fps = _videoCapture.Get(Emgu.CV.CvEnum.CapProp.Fps);
 			_totalFrames = _videoCapture.Get(Emgu.CV.CvEnum.CapProp.FrameCount);
 
-			OnFrameCountSent(_totalFrames);
+			SendFrameValue(1 , _totalFrames);
 			OnMessageSent("Video Loaded: " + _settings.FileName);
 		}
 
@@ -71,8 +82,12 @@ namespace Emgu_Test
 			while (_currentFrameNo < _totalFrames)
 			{
 				var frame = _videoCapture.QueryFrame();
+				if (frame == null)
+				{
+					break;
+				}
                 ProcessFrame(frame);
-				OnCurrentFrameSent(_currentFrameNo);
+				SendFrameValue(_currentFrameNo, _totalFrames);
 				_currentFrameNo += 1;
 				Task.Delay(Convert.ToInt32(1000.0 / _fps));
 			}
@@ -94,14 +109,17 @@ namespace Emgu_Test
 			Mat grey = new Mat();
             CvInvoke.CvtColor(frame_in, grey, Emgu.CV.CvEnum.ColorConversion.Bgr2Gray);
 
+			//CvInvoke.Threshold(grey, grey, _settings.GreyThreshold, 255, ThresholdType.Binary);
+
 			if (_settings.ErodeSize != 0)
 			{
-				CvInvoke.Erode(grey, grey, new ScalarArray(0), new Point(-1, -1), _settings.ErodeSize, BorderType.Constant, new MCvScalar(255, 255, 255));
+				CvInvoke.Erode(grey, grey, null, new Point(-1, -1), _settings.ErodeSize, BorderType.Default, new MCvScalar(1));
+				//CvInvoke.Erode(grey, grey, new ScalarArray(_settings.ErodeSize), new Point(-1, -1), 1, BorderType.Constant, new MCvScalar(255, 255, 255));
 			}
 
 			if (_settings.DilateSize != 0)
 			{
-				CvInvoke.Dilate(grey, grey, new ScalarArray(0), new Point(-1, -1), _settings.DilateSize, BorderType.Constant, new MCvScalar(255, 255, 255));
+				CvInvoke.Dilate(grey, grey, null, new Point(-1, -1), _settings.DilateSize, BorderType.Constant, new MCvScalar(1));
 			}
 
 			SimpleBlobDetectorParams EMparams = new SimpleBlobDetectorParams();
@@ -114,12 +132,22 @@ namespace Emgu_Test
             EMparams.MinArea = _settings.MinBlobSize;
             EMparams.MaxArea = _settings.MaxBlobSize;
 
-            //EMparams.FilterByCircularity = true;
-            //EMparams.FilterByConvexity = true;
-            //EMparams.FilterByInertia = true;
+			EMparams.FilterByCircularity = true;
+			EMparams.MinCircularity = _settings.MinCircularity;
+			EMparams.MaxCircularity = 1.00F;
+
+			//Filter by Convexity
+			EMparams.FilterByConvexity = true;
+			EMparams.MinConvexity = _settings.MinConvexity;
+			EMparams.MaxConvexity = 1.00F;
+
+			// Filter by Inertia
+			EMparams.FilterByInertia = true;
+			EMparams.MinInertiaRatio = _settings.MinInertiaRatio;
+			EMparams.MaxInertiaRatio = 1.00F;
 
 			EMparams.FilterByColor = true;
-            EMparams.blobColor = 255;
+            EMparams.blobColor = _settings.Color;
 
             VectorOfKeyPoint keyPoints = new VectorOfKeyPoint();
 

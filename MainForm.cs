@@ -43,7 +43,6 @@ namespace Emgu_Test
 
             _videoProcessing.MessageSent += Logger_EventLogged;
             _videoProcessing.ImageSent += Video_ShowFrame;
-            _videoProcessing.FrameCount += Video_SetFrameCount;
 			_videoProcessing.CurrentFrame += Video_SetFrameValue;
 		}
 
@@ -52,10 +51,10 @@ namespace Emgu_Test
 			_listBoxLog.Log( e);
 		}
 
-		/*private void Logger_EventLogged(object sender, LoggerEventArgs e)
+		private void Logger_EventLogged(object sender, LoggerEventArgs e)
 		{
 			_listBoxLog.Log(e.LogLevel, e.Message);
-		}*/
+		}
 
 		private void Video_ShowFrame(object sender, Bitmap e)
 		{
@@ -63,18 +62,12 @@ namespace Emgu_Test
 			Application.DoEvents();
 		}
 
-        private void Video_SetFrameCount(object sender, double e)
-		{
-            frameTrackBar.Value = 1;
-            frameTrackBar.Maximum = Convert.ToInt32(e);
-            frameTrackBar.Enabled = true;
-            Application.DoEvents();
-		}
-
-		private void Video_SetFrameValue(object sender, double e)
+		private void Video_SetFrameValue(object sender, FrameEventArgs e)
 		{
 			this.frameTrackBar.Scroll -= new System.EventHandler(this.frameTrackBar_Scroll);
-			frameTrackBar.Value = Convert.ToInt32(e);
+			frameTrackBar.Value = Convert.ToInt32(e.CurrentFrame);
+			frameTrackBar.Maximum = Convert.ToInt32(e.FrameCount);
+			frameTrackBar.Enabled = true;
 			Application.DoEvents();
 			this.frameTrackBar.Scroll += new System.EventHandler(this.frameTrackBar_Scroll);
 		}

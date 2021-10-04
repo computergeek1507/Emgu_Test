@@ -28,6 +28,10 @@ namespace Emgu_Test
 		private int _blur_size = 5;
 		private int _erode_size = 5;
 		private int _dilate_size = 5;
+		private byte _color = 255;
+		private float _min_circularity = 0.50F;
+		private float _min_convexity = 0.50F;
+		private float _min_inertia_ratio = 0.40F;
 
 		[CategoryAttribute("File Settings"), DescriptionAttribute("File Path of Video")]
 		public string FileName
@@ -118,6 +122,58 @@ namespace Emgu_Test
 			set
 			{
 				_blur_size = value;
+			}
+		}
+
+		[CategoryAttribute("Video Settings"), DescriptionAttribute("Color")]
+		public byte Color
+		{
+			get
+			{
+				return _color;
+			}
+			set
+			{
+				_color = value;
+			}
+		}
+
+		[CategoryAttribute("Video Settings"), DescriptionAttribute("Min Circularity")]
+		public float MinCircularity
+		{
+			get
+			{
+				return _min_circularity;
+			}
+			set
+			{
+				_min_circularity = value;
+			}
+		}
+
+		[CategoryAttribute("Video Settings"), DescriptionAttribute("Min Convexity")]
+		public float MinConvexity
+		{
+			get
+			{
+				return _min_convexity;
+			}
+			set
+			{
+				_min_convexity = value;
+			}
+		}
+
+		[CategoryAttribute("Video Settings"), DescriptionAttribute("Min Inertia Ratio")]
+		public float MinInertiaRatio
+		{
+			get
+			{
+				return _min_inertia_ratio;
+			}
+			set
+			{
+				_min_inertia_ratio = value;
 			}
 		}
 	}
