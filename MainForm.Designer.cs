@@ -94,6 +94,7 @@ namespace Emgu_Test
 			this.videoPictureBox.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
 			this.videoPictureBox.Name = "videoPictureBox";
 			this.videoPictureBox.Size = new System.Drawing.Size(789, 557);
+			this.videoPictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
 			this.videoPictureBox.TabIndex = 1;
 			this.videoPictureBox.TabStop = false;
 			// 
