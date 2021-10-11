@@ -15,15 +15,16 @@ namespace Emgu_Test
 {
     public partial class MainForm : Form
     {
-		private static Logger _logger = LogManager.GetCurrentClassLogger();
+		private static readonly Logger _logger = LogManager.GetCurrentClassLogger();
 		public static ListBoxLog _listBoxLog;
 
-        string _appDataFolder = string.Format("{0}{1}{2}", Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), Path.DirectorySeparatorChar, "Emgu_Test");
+		readonly string _appDataFolder = string.Format("{0}{1}{2}", Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), Path.DirectorySeparatorChar, "Emgu_Test");
 
         VideoSettings _videoSettings;
-        VideoProcessing _videoProcessing;
+		readonly VideoProcessing _videoProcessing;
+		readonly LightManager _lightManager;
 
-        public MainForm()
+		public MainForm()
         {
             InitializeComponent();
 
@@ -36,10 +37,12 @@ namespace Emgu_Test
 
 			_videoSettings = new VideoSettings();
 			LoadSettings();
+			_lightManager = new LightManager();
+			_videoProcessing = new VideoProcessing(_lightManager);
 
-			_videoProcessing = new VideoProcessing();
+			dataGridViewLights.DataSource = _lightManager.GetBinding();
 
-            videoPropertyGrid.SelectedObject = _videoSettings;
+			videoPropertyGrid.SelectedObject = _videoSettings;
 
             _videoProcessing.MessageSent += Logger_EventLogged;
             _videoProcessing.ImageSent += Video_ShowFrame;
@@ -144,6 +147,7 @@ namespace Emgu_Test
 			}
 			catch (Exception ex)
 			{
+				_listBoxLog.Log(Level.Warning, ex.Message);
 			}
 		}
 
@@ -152,6 +156,19 @@ namespace Emgu_Test
 			if (File.Exists(_videoSettings.FileName))//see if file exists
 			{
 				_videoProcessing.LoadVideo(_videoSettings);
+			}
+		}
+
+		private void buttonStop_Click(object sender, EventArgs e)
+		{
+			_videoProcessing.SetStop();
+		}
+
+		private void exportAsXModelToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			if (xModelSaveFileDialog.ShowDialog() == DialogResult.OK)
+			{
+				_lightManager.ExportModel(xModelSaveFileDialog.FileName, _videoSettings.GridScale);
 			}
 		}
 	}

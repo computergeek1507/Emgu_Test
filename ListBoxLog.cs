@@ -24,12 +24,12 @@ namespace Emgu_Test
 
 		private bool _disposed;
 		private ListBox _listBox;
-		private string _messageFormat;
-		private int _maxEntriesInListBox;
+		private readonly string _messageFormat;
+		private readonly int _maxEntriesInListBox;
 		private bool _canAdd;
 		private bool _paused;
 
-		private static Logger logger = LogManager.GetCurrentClassLogger();
+		private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
 		private void OnHandleCreated(object sender, EventArgs e)
 		{

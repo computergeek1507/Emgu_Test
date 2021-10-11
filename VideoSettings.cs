@@ -32,6 +32,9 @@ namespace Emgu_Test
 		private float _min_circularity = 0.50F;
 		private float _min_convexity = 0.50F;
 		private float _min_inertia_ratio = 0.40F;
+		private int _light_count = 50;
+		private int _min_light_size = 30;
+		private int _grid_scale = 10;
 
 		[CategoryAttribute("File Settings"), DescriptionAttribute("File Path of Video")]
 		public string FileName
@@ -174,6 +177,45 @@ namespace Emgu_Test
 			set
 			{
 				_min_inertia_ratio = value;
+			}
+		}
+
+		[CategoryAttribute("Light Settings"), DescriptionAttribute("Number of Christmas Lights")]
+		public int LightCount
+		{
+			get
+			{
+				return _light_count;
+			}
+			set
+			{
+				_light_count = value;
+			}
+		}
+
+		[CategoryAttribute("Light Settings"), DescriptionAttribute("Minimum Light Size")]
+		public int MinLightSize
+		{
+			get
+			{
+				return _min_light_size;
+			}
+			set
+			{
+				_min_light_size = value;
+			}
+		}
+
+		[CategoryAttribute("Export Settings"), DescriptionAttribute("Grid Scale")]
+		public int GridScale
+		{
+			get
+			{
+				return _grid_scale;
+			}
+			set
+			{
+				_grid_scale = value;
 			}
 		}
 	}
