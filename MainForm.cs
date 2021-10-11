@@ -47,6 +47,7 @@ namespace Emgu_Test
             _videoProcessing.MessageSent += Logger_EventLogged;
             _videoProcessing.ImageSent += Video_ShowFrame;
 			_videoProcessing.CurrentFrame += Video_SetFrameValue;
+			_lightManager.MessageSent += Logger_EventLogged;
 		}
 
 		private void Logger_EventLogged(object sender, string e)
