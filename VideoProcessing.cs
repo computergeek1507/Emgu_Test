@@ -85,6 +85,10 @@ namespace Emgu_Test
 			_videoCapture.Set(Emgu.CV.CvEnum.CapProp.PosFrames, frameIndex);
 
 			var frame = _videoCapture.QueryFrame();
+			if (null == frame)
+			{
+				return;
+			}
             OnImageSent(frame.ToBitmap());
         }
 
