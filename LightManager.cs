@@ -127,8 +127,8 @@ namespace Emgu_Test
 				f.Write("</custommodel>");
 				f.Close();
 			}
-
 			OnMessageSent("Saved: " + filename);
+			_source.ResetBindings(false);
 		}
 
 		public List<Light> GetLights() { return _lights; }
