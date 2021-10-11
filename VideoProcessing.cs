@@ -209,7 +209,7 @@ namespace Emgu_Test
 			MCvScalar color = new MCvScalar(255, 0, 0);
 			foreach (var light in _lightManager.GetLights())
 			{
-				CvInvoke.Circle(mat, light.Position, light.Diameter, color);
+				CvInvoke.Circle(mat, light.Position, light.Diameter / 2, color);
 			}
 		}
 	}
