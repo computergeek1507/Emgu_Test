@@ -56,8 +56,12 @@ namespace Emgu_Test
 		public Light FindLight(int x, int y)
 		{
 			foreach (var node in _lights)
+			{
 				if (x == node.ScalePos.X && y == node.ScalePos.Y)
+				{
 					return node;
+				}
+			}
 
 			return null;
 		}

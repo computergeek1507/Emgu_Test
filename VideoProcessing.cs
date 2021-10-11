@@ -28,7 +28,7 @@ namespace Emgu_Test
 		int NODEOFF = 200;
 
 		VideoSettings _settings;
-        VideoCapture _videoCapture;
+		VideoCapture _videoCapture;
 		LightManager _lightManager;
 
 		double _currentFrameNo = 0;
@@ -40,9 +40,9 @@ namespace Emgu_Test
 			_lightManager = lightManager;
 
 		}
-        void OnMessageSent(string message) => MessageSent.Invoke(this, message);
+		void OnMessageSent(string message) => MessageSent.Invoke(this, message);
 
-        void OnImageSent(Bitmap e) => ImageSent.Invoke(this, e);
+		void OnImageSent(Bitmap e) => ImageSent.Invoke(this, e);
 
 		void OnCurrentFrameSent(FrameEventArgs e) => CurrentFrame.Invoke(this, e);
 
@@ -61,9 +61,9 @@ namespace Emgu_Test
 		}
 
 		public void LoadVideo(VideoSettings settings)
-        {
-            _settings = settings;
-            _videoCapture = new VideoCapture(_settings.FileName);
+		{
+			_settings = settings;
+			_videoCapture = new VideoCapture(_settings.FileName);
 
 			_fps = _videoCapture.Get(Emgu.CV.CvEnum.CapProp.Fps);
 			_totalFrames = _videoCapture.Get(Emgu.CV.CvEnum.CapProp.FrameCount);
@@ -72,11 +72,11 @@ namespace Emgu_Test
 			OnMessageSent("Video Loaded: " + _settings.FileName);
 		}
 
-        public void ProcessSingleFrame(int frameIndex)
+		public void ProcessSingleFrame(int frameIndex)
 		{
-            _videoCapture.Set(Emgu.CV.CvEnum.CapProp.PosFrames, frameIndex);
+			_videoCapture.Set(Emgu.CV.CvEnum.CapProp.PosFrames, frameIndex);
 
-            var frame = _videoCapture.QueryFrame();
+			var frame = _videoCapture.QueryFrame();
 			ProcessFrame(frame);
 		}
 
@@ -89,11 +89,11 @@ namespace Emgu_Test
 			{
 				return;
 			}
-            OnImageSent(frame.ToBitmap());
-        }
+			OnImageSent(frame.ToBitmap());
+		}
 
 		public void ProcessVideo()
-        {
+		{
 			_stop = false;
 			_lightManager.Clear();
 			_currentFrameNo = 0;
@@ -105,7 +105,7 @@ namespace Emgu_Test
 				{
 					break;
 				}
-                ProcessFrame(frame);
+				ProcessFrame(frame);
 				SendFrameValue(_currentFrameNo, _totalFrames);
 				_currentFrameNo += 1;
 				//Task.Delay(Convert.ToInt32(1000.0 / _fps));
@@ -126,7 +126,7 @@ namespace Emgu_Test
 
 			//convert to greyscale
 			Mat grey = new Mat();
-            CvInvoke.CvtColor(frame_in, grey, Emgu.CV.CvEnum.ColorConversion.Bgr2Gray);
+			CvInvoke.CvtColor(frame_in, grey, Emgu.CV.CvEnum.ColorConversion.Bgr2Gray);
 
 			//CvInvoke.Threshold(grey, grey, _settings.GreyThreshold, 255, ThresholdType.Binary);
 
@@ -142,14 +142,14 @@ namespace Emgu_Test
 			}
 
 			SimpleBlobDetectorParams EMparams = new SimpleBlobDetectorParams();
-            SimpleBlobDetector detector;
+			SimpleBlobDetector detector;
 
-            EMparams.MinThreshold = _settings.GreyThreshold;
-            EMparams.MaxThreshold = 255;
+			EMparams.MinThreshold = _settings.GreyThreshold;
+			EMparams.MaxThreshold = 255;
 
-            EMparams.FilterByArea = true;
-            EMparams.MinArea = _settings.MinBlobSize;
-            EMparams.MaxArea = _settings.MaxBlobSize;
+			EMparams.FilterByArea = true;
+			EMparams.MinArea = _settings.MinBlobSize;
+			EMparams.MaxArea = _settings.MaxBlobSize;
 
 			EMparams.FilterByCircularity = true;
 			EMparams.MinCircularity = _settings.MinCircularity;
@@ -166,19 +166,19 @@ namespace Emgu_Test
 			EMparams.MaxInertiaRatio = 1.00F;
 
 			EMparams.FilterByColor = true;
-            EMparams.blobColor = _settings.Color;
+			EMparams.blobColor = _settings.Color;
 
-            VectorOfKeyPoint keyPoints = new VectorOfKeyPoint();
+			VectorOfKeyPoint keyPoints = new VectorOfKeyPoint();
 
-            Mat im = new Mat();
+			Mat im = new Mat();
 
-            detector = new SimpleBlobDetector(EMparams);
+			detector = new SimpleBlobDetector(EMparams);
 
-            detector.DetectRaw(grey, keyPoints);
+			detector.DetectRaw(grey, keyPoints);
 
-            Mat im_with_keypoints = new Mat();
-            Bgr color = new Bgr(0, 0, 255);
-            Features2DToolbox.DrawKeypoints(frame_in, keyPoints, im_with_keypoints, color, Features2DToolbox.KeypointDrawType.DrawRichKeypoints);
+			Mat im_with_keypoints = new Mat();
+			Bgr color = new Bgr(0, 0, 255);
+			Features2DToolbox.DrawKeypoints(frame_in, keyPoints, im_with_keypoints, color, Features2DToolbox.KeypointDrawType.DrawRichKeypoints);
 
 			//skip start frames for now
 			if (keyPoints.Size == 1)
@@ -198,11 +198,11 @@ namespace Emgu_Test
 
 			DrawFoundNodes(im_with_keypoints);
 
-            // Show blobs
-            OnImageSent(im_with_keypoints.ToBitmap());
+			// Show blobs
+			OnImageSent(im_with_keypoints.ToBitmap());
 
-            //CvInvoke.Imshow("Blob Detector " + keyPoints.Size, grey);
-        }
+			//CvInvoke.Imshow("Blob Detector " + keyPoints.Size, grey);
+		}
 
 		private void DrawFoundNodes(Mat mat)
 		{
