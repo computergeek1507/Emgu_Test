@@ -13,22 +13,22 @@ using NLog;
 
 namespace Emgu_Test
 {
-    public partial class MainForm : Form
-    {
+	public partial class MainForm : Form
+	{
 		private static readonly Logger _logger = LogManager.GetCurrentClassLogger();
 		public static ListBoxLog _listBoxLog;
 
 		readonly string _appDataFolder = string.Format("{0}{1}{2}", Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), Path.DirectorySeparatorChar, "Emgu_Test");
 
-        VideoSettings _videoSettings;
+		VideoSettings _videoSettings;
 		readonly VideoProcessing _videoProcessing;
 		readonly LightManager _lightManager;
 
 		public MainForm()
-        {
-            InitializeComponent();
+		{
+			InitializeComponent();
 
-            _listBoxLog = new ListBoxLog(logListBox);
+			_listBoxLog = new ListBoxLog(logListBox);
 
 			if (!(Directory.Exists(_appDataFolder)))
 			{
@@ -44,9 +44,10 @@ namespace Emgu_Test
 
 			videoPropertyGrid.SelectedObject = _videoSettings;
 
-            _videoProcessing.MessageSent += Logger_EventLogged;
-            _videoProcessing.ImageSent += Video_ShowFrame;
+			_videoProcessing.MessageSent += Logger_EventLogged;
+			_videoProcessing.ImageSent += Video_ShowFrame;
 			_videoProcessing.CurrentFrame += Video_SetFrameValue;
+			_lightManager.MessageSent += Logger_EventLogged;
 		}
 
 		private void Logger_EventLogged(object sender, string e)
@@ -76,19 +77,19 @@ namespace Emgu_Test
 		}
 
 		private void openToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            if (openFileDialog1.ShowDialog() == DialogResult.OK)
-            {
-                _videoSettings.FileName = openFileDialog1.FileName;
-                _videoProcessing.LoadVideo(_videoSettings);
-                Application.DoEvents();
-            }
-        }
+		{
+			if (openFileDialog1.ShowDialog() == DialogResult.OK)
+			{
+				_videoSettings.FileName = openFileDialog1.FileName;
+				_videoProcessing.LoadVideo(_videoSettings);
+				Application.DoEvents();
+			}
+		}
 
-        private void exitToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            this.Close();
-        }
+		private void exitToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			this.Close();
+		}
 
 		private void videoPropertyGrid_PropertyValueChanged(object s, PropertyValueChangedEventArgs e)
 		{
@@ -97,18 +98,18 @@ namespace Emgu_Test
 
 		private void processVideoButton_Click(object sender, EventArgs e)
 		{
-            _videoProcessing.ProcessVideo();
-        }
+			_videoProcessing.ProcessVideo();
+		}
 
 		private void processFrameButton_Click(object sender, EventArgs e)
 		{
-            _videoProcessing.ProcessSingleFrame(frameTrackBar.Value);
-        }
+			_videoProcessing.ProcessSingleFrame(frameTrackBar.Value);
+		}
 
 		private void frameTrackBar_Scroll(object sender, EventArgs e)
 		{
-            _videoProcessing.ScrubFrame(frameTrackBar.Value);
-        }
+			_videoProcessing.ScrubFrame(frameTrackBar.Value);
+		}
 
 		private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
 		{

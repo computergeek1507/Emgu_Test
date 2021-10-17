@@ -10,12 +10,8 @@ namespace Emgu_Test
 	public class Light : IComparable<Light>
 	{
 		public int Number { get; set; }
-		//public float A { get; set; }
 		public Point Position { get; set; }
-
 		public Point ScalePos { get; set; }
-
-		//public float B { get; set; }
 		public int Diameter { get; set; }
 
         /// <summary>

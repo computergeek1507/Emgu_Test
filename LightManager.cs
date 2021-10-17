@@ -14,12 +14,16 @@ namespace Emgu_Test
 		readonly List<Light> _lights = new List<Light>();
 		private readonly BindingSource _source = new BindingSource();
 
-		int _index = 0;
+		public event EventHandler<string> MessageSent;
+
+		int _index = 1;
 
 		public LightManager()
 		{
 			_source.DataSource = _lights;
 		}
+
+		void OnMessageSent(string message) => MessageSent.Invoke(this, message);
 
 		public bool AddLight(PointF loc, float size)
 		{
@@ -45,7 +49,7 @@ namespace Emgu_Test
 		public void Clear()
 		{
 			_lights.Clear();
-			_index = 0;
+			_index = 1;
 			_source.ResetBindings(false);
 		}
 
@@ -56,24 +60,32 @@ namespace Emgu_Test
 		public Light FindLight(int x, int y)
 		{
 			foreach (var node in _lights)
+			{
 				if (x == node.ScalePos.X && y == node.ScalePos.Y)
+				{
 					return node;
+				}
+			}
 
 			return null;
 		}
 
-		public Tuple<int, int> GetBoundingSize(int scale)
+		public void ExportModel(string filename, int scale)
 		{
-			int width = 0;
-			int height = 0;
+			FileInfo file = new FileInfo(filename);
+			var cm = "";
+			//var size = GetBoundingSize(scale);
+			int x_max = 0;
+			int x_min = 100000;
+			int y_max = 0;
+			int y_min = 100000;
 			foreach (var light in _lights)
 			{
-				width = Math.Max(width, light.Position.X);
-				height = Math.Max(height, light.Position.Y);
-				light.ScalePos = new Point (light.Position.X / scale, light.Position.Y / scale);
+				x_max = Math.Max(x_max, light.Position.X);
+				x_min = Math.Min(x_min, light.Position.X);
+				y_max = Math.Max(y_max, light.Position.Y);
+				y_min = Math.Min(y_min, light.Position.Y);
 			}
-			return Tuple.Create(width/scale, height/scale);
-		}
 
 		/// <summary>
 		/// Get the bounding sizes for the xmodel based on the diameters of the blobs found.
@@ -96,10 +108,17 @@ namespace Emgu_Test
 			var cm = "";
 			//var size = GetBoundingSize(scale);
 			var size = GetBoundingSize_Diameter();
+			int x_dist = ((x_max - x_min + 1) / scale) + 1;
+			int y_dist = ((y_max - y_min + 1) / scale) + 1;
 
-			for (var x = 0; x <= size.Item1 + 1; x++)
+			foreach (var light in _lights)
 			{
-				for (var y = 0; y <= size.Item2 + 1; y++)
+				light.ScalePos = new Point((light.Position.X - x_min) / scale, (light.Position.Y - y_min) / scale);
+			}
+
+			for (var y = 0; y <= y_dist; y++)
+			{
+				for (var x = 0; x <= x_dist; x++)
 				{
 					var cell = "";
 					Light lght = FindLight(x, y);
@@ -117,9 +136,9 @@ namespace Emgu_Test
 			using (var f = new StreamWriter(filename))
 			{
 				f.Write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<custommodel \n");
-				f.Write("name=\"{0}\" ", file.Name);
-				f.Write("parm1=\"{0}\" ", size.Item1);
-				f.Write("parm2=\"{0}\" ", size.Item2);
+				f.Write("name=\"{0}\" ", Path.GetFileNameWithoutExtension(file.Name));
+				f.Write("parm1=\"{0}\" ", x_dist);
+				f.Write("parm2=\"{0}\" ", y_dist);
 				f.Write("StringType=\"RGB Nodes\" ");
 				f.Write("Transparency=\"0\" ");
 				f.Write("PixelSize=\"2\" ");
@@ -137,6 +156,8 @@ namespace Emgu_Test
 				f.Write("</custommodel>");
 				f.Close();
 			}
+			OnMessageSent("Saved: " + filename);
+			_source.ResetBindings(false);
 		}
 
 		public List<Light> GetLights() { return _lights; }
