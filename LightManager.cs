@@ -49,6 +49,10 @@ namespace Emgu_Test
 			_source.ResetBindings(false);
 		}
 
+		/// <summary>
+		/// Find the Light obj matching the given X,Y coordinate pair.
+		/// </summary>
+		/// <returns>A reference to the Light</returns>
 		public Light FindLight(int x, int y)
 		{
 			foreach (var node in _lights)
@@ -71,18 +75,34 @@ namespace Emgu_Test
 			return Tuple.Create(width/scale, height/scale);
 		}
 
+		/// <summary>
+		/// Get the bounding sizes for the xmodel based on the diameters of the blobs found.
+		/// </summary>
+		/// <returns>The width and height of the matrix size of the xmodel.</returns>
+		public Tuple<int, int> GetBoundingSize_Diameter()
+        {
+			_lights.Sort(); //Sort based on the icomparable
+			int smallestDiam = _lights[_lights.Count() - 1].Diameter;
+
+			int scaler = 4; 
+			int scale = smallestDiam / scaler; 
+			
+			return GetBoundingSize(scale);
+		}
+
 		public void ExportModel(string filename, int scale)
 		{
 			FileInfo file = new FileInfo(filename);
 			var cm = "";
-			var size = GetBoundingSize(scale);
+			//var size = GetBoundingSize(scale);
+			var size = GetBoundingSize_Diameter();
 
 			for (var x = 0; x <= size.Item1 + 1; x++)
 			{
 				for (var y = 0; y <= size.Item2 + 1; y++)
 				{
 					var cell = "";
-					Light lght = FindLight(y, x);
+					Light lght = FindLight(x, y);
 					if (lght != null)
 					{
 						cell = lght.Number.ToString();
