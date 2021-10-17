@@ -70,22 +70,18 @@ namespace Emgu_Test
 			return null;
 		}
 
-		public void ExportModel(string filename, int scale)
+		public Tuple<int, int> GetBoundingSize(int scale)
 		{
-			FileInfo file = new FileInfo(filename);
-			var cm = "";
-			//var size = GetBoundingSize(scale);
-			int x_max = 0;
-			int x_min = 100000;
-			int y_max = 0;
-			int y_min = 100000;
+			int width = 0;
+			int height = 0;
 			foreach (var light in _lights)
 			{
-				x_max = Math.Max(x_max, light.Position.X);
-				x_min = Math.Min(x_min, light.Position.X);
-				y_max = Math.Max(y_max, light.Position.Y);
-				y_min = Math.Min(y_min, light.Position.Y);
+				width = Math.Max(width, light.Position.X);
+				height = Math.Max(height, light.Position.Y);
+				light.ScalePos = new Point(light.Position.X / scale, light.Position.Y / scale);
 			}
+			return Tuple.Create(width / scale, height / scale);
+		}
 
 		/// <summary>
 		/// Get the bounding sizes for the xmodel based on the diameters of the blobs found.
@@ -107,7 +103,18 @@ namespace Emgu_Test
 			FileInfo file = new FileInfo(filename);
 			var cm = "";
 			//var size = GetBoundingSize(scale);
-			var size = GetBoundingSize_Diameter();
+			int x_max = 0;
+			int x_min = 100000;
+			int y_max = 0;
+			int y_min = 100000;
+			foreach (var light in _lights)
+			{
+				x_max = Math.Max(x_max, light.Position.X);
+				x_min = Math.Min(x_min, light.Position.X);
+				y_max = Math.Max(y_max, light.Position.Y);
+				y_min = Math.Min(y_min, light.Position.Y);
+			}
+
 			int x_dist = ((x_max - x_min + 1) / scale) + 1;
 			int y_dist = ((y_max - y_min + 1) / scale) + 1;
 
