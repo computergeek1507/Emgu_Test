@@ -29,7 +29,12 @@ namespace Emgu_Test
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.dataGridViewLights = new System.Windows.Forms.DataGridView();
+            this.Number = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Position = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ScalePos = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Diameter = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -50,10 +55,6 @@ namespace Emgu_Test
             this.tabPageSettings = new System.Windows.Forms.TabPage();
             this.tabPageLights = new System.Windows.Forms.TabPage();
             this.xModelSaveFileDialog = new System.Windows.Forms.SaveFileDialog();
-            this.Number = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Position = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ScalePos = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Diameter = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewLights)).BeginInit();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.videoPictureBox)).BeginInit();
@@ -89,6 +90,50 @@ namespace Emgu_Test
             this.dataGridViewLights.ShowEditingIcon = false;
             this.dataGridViewLights.Size = new System.Drawing.Size(200, 754);
             this.dataGridViewLights.TabIndex = 0;
+            // 
+            // Number
+            // 
+            this.Number.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            this.Number.DataPropertyName = "Number";
+            this.Number.HeaderText = "Number";
+            this.Number.MinimumWidth = 6;
+            this.Number.Name = "Number";
+            this.Number.ReadOnly = true;
+            this.Number.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.Number.Width = 69;
+            // 
+            // Position
+            // 
+            this.Position.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            this.Position.DataPropertyName = "Position";
+            this.Position.HeaderText = "Position";
+            this.Position.MinimumWidth = 6;
+            this.Position.Name = "Position";
+            this.Position.ReadOnly = true;
+            this.Position.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.Position.Width = 67;
+            // 
+            // ScalePos
+            // 
+            this.ScalePos.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            this.ScalePos.DataPropertyName = "ScalePos";
+            this.ScalePos.HeaderText = "ScalePos";
+            this.ScalePos.MinimumWidth = 6;
+            this.ScalePos.Name = "ScalePos";
+            this.ScalePos.ReadOnly = true;
+            this.ScalePos.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.ScalePos.Width = 72;
+            // 
+            // Diameter
+            // 
+            this.Diameter.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            this.Diameter.DataPropertyName = "Diameter";
+            this.Diameter.HeaderText = "Diameter";
+            this.Diameter.MinimumWidth = 6;
+            this.Diameter.Name = "Diameter";
+            this.Diameter.ReadOnly = true;
+            this.Diameter.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.Diameter.Width = 77;
             // 
             // menuStrip1
             // 
@@ -303,50 +348,6 @@ namespace Emgu_Test
             this.xModelSaveFileDialog.Filter = "xmodel files (*.xmodel)|*.xmodel|All files (*.*)|*.*";
             this.xModelSaveFileDialog.RestoreDirectory = true;
             // 
-            // Number
-            // 
-            this.Number.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            this.Number.DataPropertyName = "Number";
-            this.Number.HeaderText = "Number";
-            this.Number.MinimumWidth = 6;
-            this.Number.Name = "Number";
-            this.Number.ReadOnly = true;
-            this.Number.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.Number.Width = 69;
-            // 
-            // Position
-            // 
-            this.Position.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            this.Position.DataPropertyName = "Position";
-            this.Position.HeaderText = "Position";
-            this.Position.MinimumWidth = 6;
-            this.Position.Name = "Position";
-            this.Position.ReadOnly = true;
-            this.Position.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.Position.Width = 67;
-            // 
-            // ScalePos
-            // 
-            this.ScalePos.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            this.ScalePos.DataPropertyName = "ScalePos";
-            this.ScalePos.HeaderText = "ScalePos";
-            this.ScalePos.MinimumWidth = 6;
-            this.ScalePos.Name = "ScalePos";
-            this.ScalePos.ReadOnly = true;
-            this.ScalePos.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.ScalePos.Width = 72;
-            // 
-            // Diameter
-            // 
-            this.Diameter.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            this.Diameter.DataPropertyName = "Diameter";
-            this.Diameter.HeaderText = "Diameter";
-            this.Diameter.MinimumWidth = 6;
-            this.Diameter.Name = "Diameter";
-            this.Diameter.ReadOnly = true;
-            this.Diameter.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.Diameter.Width = 77;
-            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
@@ -355,9 +356,10 @@ namespace Emgu_Test
             this.Controls.Add(this.splitContainer1);
             this.Controls.Add(this.logListBox);
             this.Controls.Add(this.menuStrip1);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "MainForm";
-            this.Text = "Video Processing Test";
+            this.Text = "Video2xLights";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
             this.Shown += new System.EventHandler(this.MainForm_Shown);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewLights)).EndInit();

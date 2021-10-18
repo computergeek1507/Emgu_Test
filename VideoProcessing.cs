@@ -77,7 +77,7 @@ namespace Emgu_Test
 			_videoCapture.Set(Emgu.CV.CvEnum.CapProp.PosFrames, frameIndex);
 
 			var frame = _videoCapture.QueryFrame();
-			ProcessFrame(frame);
+			ProcessFrame(frame, true);
 		}
 
 		public void ScrubFrame(int frameIndex)
@@ -112,7 +112,7 @@ namespace Emgu_Test
 			}
 		}
 
-		void ProcessFrame(Mat frame_in)
+		void ProcessFrame(Mat frame_in, bool view_only = false)
 		{
 			//https://learnopencv.com/blob-detection-using-opencv-python-c/
 
@@ -180,24 +180,26 @@ namespace Emgu_Test
 			Bgr color = new Bgr(0, 0, 255);
 			Features2DToolbox.DrawKeypoints(frame_in, keyPoints, im_with_keypoints, color, Features2DToolbox.KeypointDrawType.DrawRichKeypoints);
 
-			//skip start frames for now
-			if (keyPoints.Size == 1)
+			if (!view_only)
 			{
-				for (int i =0; i< keyPoints.Size;++i)
+				//skip start frames for now
+				if (keyPoints.Size == 1)
 				{
-					if (keyPoints[i].Size < _settings.MinLightSize)
+					for (int i = 0; i < keyPoints.Size; ++i)
 					{
-						continue;
-					}
-					if (_lightManager.AddLight(keyPoints[0].Point, keyPoints[0].Size))
-					{
-						break;
+						if (keyPoints[i].Size < _settings.MinLightSize)
+						{
+							continue;
+						}
+						if (_lightManager.AddLight(keyPoints[0].Point, keyPoints[0].Size))
+						{
+							break;
+						}
 					}
 				}
+
+				DrawFoundNodes(im_with_keypoints);
 			}
-
-			DrawFoundNodes(im_with_keypoints);
-
 			// Show blobs
 			OnImageSent(im_with_keypoints.ToBitmap());
 
@@ -209,7 +211,8 @@ namespace Emgu_Test
 			MCvScalar color = new MCvScalar(255, 0, 0);
 			foreach (var light in _lightManager.GetLights())
 			{
-				CvInvoke.Circle(mat, light.Position, light.Diameter / 2, color);
+				CvInvoke.Circle(mat, light.Position, light.Diameter / 2, color, -1);
+				CvInvoke.PutText(mat, light.Number.ToString(), light.Position, FontFace.HersheySimplex, 1.0, new Bgr(Color.Red).MCvScalar,3);
 			}
 		}
 	}
